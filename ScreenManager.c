@@ -176,6 +176,20 @@ void ScreenManager_run(ScreenManager* this, Panel** lastFocus, int* lastKey) {
       set_escdelay(25);
       ch = getch();
 
+      // currentBar->size == 3 is a workaround to identify prompts
+      if (this->settings->vimMode && panelFocus->currentBar->size != 3) {
+         switch (ch) {
+            case 'h': ch = KEY_LEFT; break;
+            case 'j': ch = KEY_DOWN; break;
+            case 'k': ch = KEY_UP; break;
+            case 'l': ch = KEY_RIGHT; break;
+            case 'H': ch = 'h'; break;
+            case 'J': ch = 'j'; break;
+            case 'K': ch = 'k'; break;
+            case 'L': ch = 'l'; break;
+         }
+      }
+
       HandlerResult result = IGNORED;
       if (ch == KEY_MOUSE && this->settings->enableMouse) {
          ch = ERR;
