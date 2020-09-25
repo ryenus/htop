@@ -97,6 +97,7 @@ DisplayOptionsPanel* DisplayOptionsPanel_new(Settings* settings, ScreenManager* 
    Panel_add(super, (Object*) CheckItem_newByRef(xStrdup("Show temperature in degree Fahrenheit"), &(settings->degreeFahrenheit)));
    #endif
    Panel_add(super, (Object*) CheckItem_newByRef(xStrdup("Enable the mouse"), &(settings->enableMouse)));
+   Panel_add(super, (Object*) CheckItem_newByRef(xStrdup("Enable vim mode"), &(settings->vimMode)));
    Panel_add(super, (Object*) CheckItem_newByRef(xStrdup("Highlight new and old processes"), &(settings->highlightChanges)));
    #ifdef HAVE_LIBHWLOC
    Panel_add(super, (Object*) CheckItem_newByRef(xStrdup("Show topology when selecting affinity by default"), &(settings->topologyAffinity)));
