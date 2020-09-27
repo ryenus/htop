@@ -9,12 +9,15 @@
 #include "Panel.h"
 #include "ProvideCurses.h"
 #include "XUtils.h"
+#include <unistd.h>
+#include <time.h>
 
 
 static void CommandScreen_scan(InfoScreen* this) {
    Panel* panel = this->display;
    int idx = MAXIMUM(Panel_getSelectedIndex(panel), 0);
    Panel_prune(panel);
+   clock_t t = clock();
 
    const char* p = this->process->comm;
    char* line = xMalloc(COLS + 1);
@@ -42,6 +45,10 @@ static void CommandScreen_scan(InfoScreen* this) {
    }
 
    free(line);
+   t = clock() - t;
+   FILE* f = fopen("cmdscr.log", "a+");
+   fprintf(f, "[cmdscr] pid:%d time:%zu\n", this->process->pid, (unsigned long) t);
+   fclose(f);
    Panel_setSelected(panel, idx);
 }
 
