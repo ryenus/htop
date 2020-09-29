@@ -21,6 +21,7 @@ static void CommandScreen_scan(InfoScreen* this) {
 
    const char* p = this->process->comm;
    char* line = xMalloc(COLS + 1);
+   char* copy = xMalloc(strlen(p) + 1); copy[0] = '\0';
    int line_offset = 0, last_spc = -1, len;
    for (; *p != '\0'; p++, line_offset++) {
       line[line_offset] = *p;
@@ -31,7 +32,7 @@ static void CommandScreen_scan(InfoScreen* this) {
       if (line_offset == COLS) {
          len = (last_spc == -1) ? line_offset : last_spc;
          line[len] = '\0';
-         InfoScreen_addLine(this, line);
+         InfoScreen_addLine(this, line); strcat(copy, line);
 
          line_offset -= len;
          last_spc = -1;
@@ -41,13 +42,14 @@ static void CommandScreen_scan(InfoScreen* this) {
 
    if (line_offset > 0) {
       line[line_offset] = '\0';
-      InfoScreen_addLine(this, line);
+      InfoScreen_addLine(this, line); strcat(copy, line);
    }
 
-   free(line);
+   int ok = strcmp(this->process->comm, copy);
+   free(line); free(copy);
    t = clock() - t;
    FILE* f = fopen("cmdscr.log", "a+");
-   fprintf(f, "[cmdscr] pid:%d time:%zu\n", this->process->pid, (unsigned long) t);
+   fprintf(f, "[cmdscr] pid:%d time:%zu strcmp:%d\n", this->process->pid, (unsigned long) t, ok); //, this->process->comm, copy);
    fclose(f);
    Panel_setSelected(panel, idx);
 }
