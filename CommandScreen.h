@@ -12,6 +12,7 @@ in the source distribution for its full text.
 #include "Object.h"
 #include "Process.h"
 
+#define MAX_LINE_SIZE (COLS * 4 + 1)  // leave room for accent marks etc.
 
 typedef struct CommandScreen_ {
    InfoScreen super;
